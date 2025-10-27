@@ -3,52 +3,363 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>大模型的可解释-2025</title>
+  <title>大模型的可解释性研究系列</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f6f9;
-      color: #2c3e50;
-      text-align: center;
-      padding: 50px;
-      margin: 0;
+    :root {
+      --primary: #2980b9;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --light: #f8f9fa;
+      --dark: #2c3e50;
+      --gray: #95a5a6;
     }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    h1 { color: #3498db; }
-    p { line-height: 1.8; }
-    a { color: #e74c3c; text-decoration: none; }
-    a:hover { text-decoration: underline; }
 
-    /* 给 GIF 加点样式 */
-    .gif-image {
-      width: 100%;
-      max-width: 500px;
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f4f6f9;
+      color: var(--dark);
+      line-height: 1.8;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 0 0 20px 20px;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: 2.8em;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    p.subtitle {
+      font-size: 1.2em;
+      opacity: 0.9;
+      margin: 10px 0 20px;
+    }
+
+    .authors {
+      font-weight: 500;
+      font-size: 1.1em;
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 900px;
+      margin: 60px auto;
+    }
+
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      background-color: #ddd;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -3px;
+      border-radius: 3px;
+    }
+
+    .paper-card {
+      padding: 30px;
+      position: relative;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      margin-bottom: 60px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .paper-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .paper-card.left {
+      left: calc(50% + 40px);
+      width: 45%;
+    }
+
+    .paper-card.right {
+      left: calc(-50% - 40px);
+      width: 45%;
+      align-self: flex-end;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #e3f2fd;
+      color: #1976d2;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 500;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .figure {
+      max-width: 100%;
       height: auto;
-      border-radius: 10px;
+      border-radius: 12px;
       margin: 20px 0;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 100px;
+      padding: 40px;
+      color: var(--gray);
+      font-size: 0.9em;
+      border-top: 1px solid #eee;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 10px 5px;
+      transition: all 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background: #c0392b;
+      transform: scale(1.05);
+    }
+
+    .metric-box {
+      background: #f8f9fa;
+      border-left: 4px solid var(--secondary);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    @media (max-width: 768px) {
+      .timeline::after {
+        left: 31px;
+      }
+      .paper-card {
+        width: 100%;
+        left: 0 !important;
+        margin-left: 60px;
+      }
+      .paper-card.right {
+        margin-left: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>👋 你好，这是一个大模型可解释系列展示的学术网站。</h1>
-    <p></p>
 
-    <!-- 插入 GIF 动图 -->
-    <!-- <img src="./demo.gif" alt="GIF 动画演示" class="gif-image"> -->
+<div class="container">
 
-    <!-- 如果你把 GIF 放在 images 文件夹里，就写： -->
-    <!-- <img src="./images/demo.gif" alt="GIF 动画演示" class="gif-image"> -->
+  <header>
+    <h1>🔍 大模型的可解释性研究系列</h1>
+    <p class="subtitle">从结构发现到动态控制：构建透明、可控的语言模型</p>
+    <div class="authors">作者：Yukun Zhang, Qi Dong</div>
+  </header>
 
-    <!-- <p><a href="https://github.com/zhangsan" target="_blank">👉 查看我的 GitHub</a></p> -->
-  </div>
+  <!-- 科学故事导语 -->
+  <section style="text-align: center; margin: 40px 0;">
+    <p>我们提出了一个完整的理论体系，回答了四个关键问题：</p>
+    <ul style="display: inline-block; text-align: left;">
+      <li><strong>Q1:</strong> 大模型内部是否有规律结构？→ <strong>MSPGT</strong></li>
+      <li><strong>Q2:</strong> 不同层级是否承担不同功能？→ <strong>Hierarchical Alignment</strong></li>
+      <li><strong>Q3:</strong> 能否在不同尺度间建立映射？→ <strong>MSMA</strong></li>
+      <li><strong>Q4:</strong> 表示轨迹如何影响生成质量？→ <strong>DMET</strong></li>
+    </ul>
+    <p>下面是我们一步步揭开黑箱的旅程👇</p>
+  </section>
+
+  <!-- 时间轴式布局 -->
+  <div class="timeline">
+
+    <!-- 论文一 -->
+    <div class="paper-card left">
+      <h2>1. MSPGT：多尺度生成理论</h2>
+      <p><strong>核心问题：</strong>为什么大模型会自发形成三层语义结构？</p>
+
+      <div class="tags">
+        <span class="tag">理论建模</span>
+        <span class="tag">H-VIB</span>
+        <span class="tag">信息瓶颈</span>
+        <span class="tag">可检验预测</span>
+      </div>
+
+      <p>我们提出 <strong>Multi-Scale Probabilistic Generation Theory (MSPGT)</strong>，将 LLM 视为一个分层变分信息瓶颈系统。该理论预测存在三个语义尺度：</p>
+      <ul>
+        <li><strong>Local</strong>：词汇/语法处理</li>
+        <li><strong>Intermediate</strong>：句法/逻辑控制</li>
+        <li><strong>Global</strong>：主题/事实一致性</li>
+      </ul>
+
+      <p>通过多信号融合方法（CKA + 探针 + 注意力漂移），我们在 Llama/Qwen 上验证了以下预测：</p>
+      <ul>
+        <li>✅ 同家族模型 L-I 边界高度一致</li>
+        <li>✅ 中间层扰动显著破坏句子结构</li>
+        <li>✅ 局部脆性随架构变化巨大</li>
+      </ul>
+
+      <img src="figures/mspgt_framework.png" alt="MSPGT Framework" class="figure">
+
+      <p>这项工作为后续的“结构感知对齐”提供了理论基础。</p>
+
+      <p>
+        <a href="papers/mspgt.pdf" target="_blank" class="cta-button">📄 下载 PDF</a>
+        <a href="https://github.com/dongqi2025/mspgt-code" target="_blank" class="cta-button">💻 代码开源</a>
+      </p>
+    </div>
+
+    <!-- 论文二 -->
+    <div class="paper-card right">
+      <h2>2. Hierarchical Alignment</h2>
+      <p><strong>核心问题：</strong>能否基于层级分工进行精准对齐？</p>
+
+      <div class="tags">
+        <span class="tag">对齐优化</span>
+        <span class="tag">LoRA</span>
+        <span class="tag">DPO</span>
+        <span class="tag">避免对齐税</span>
+      </div>
+
+      <p>现有对齐方法（如 DPO）常导致“对齐税”——流畅但逻辑差。我们提出<strong>分层对齐策略</strong>，仅对特定功能块微调：</p>
+
+      <ul>
+        <li><strong>Local-Align</strong>：提升语法流畅性 (+0.52 胜率)</li>
+        <li><strong>Global-Align</strong>：提升事实一致性和逻辑连贯性 (+0.10)</li>
+      </ul>
+
+      <p>实验证明，这种“手术式”微调不仅更有效，还能<strong>避免对齐税</strong>。</p>
+
+      <img src="figures/hierarchical_alignment.png" alt="Hierarchical Alignment" class="figure">
+
+      <p>这是首次系统验证“高层负责推理”的假设，并展示了如何利用内部结构实现更优对齐。</p>
+
+      <p>
+        <a href="papers/hierarchical-alignment.pdf" target="_blank" class="cta-button">📄 下载 PDF</a>
+        <a href="https://github.com/dongqi2025/hierarchical-alignment" target="_blank" class="cta-button">💻 代码开源</a>
+      </p>
+    </div>
+
+    <!-- 论文三 -->
+    <div class="paper-card left">
+      <h2>3. MSMA：多尺度流形对齐</h2>
+      <p><strong>核心问题：</strong>如何在不同语义尺度之间建立精确映射？</p>
+
+      <div class="tags">
+        <span class="tag">信息几何</span>
+        <span class="tag">流形对齐</span>
+        <span class="tag">跨尺度映射</span>
+        <span class="tag">可控生成</span>
+      </div>
+
+      <p>我们在前两篇基础上，构建了从局部到全局的<strong>跨尺度表示对齐框架</strong>（MSMA）。通过最小化 KL 散度、最大化互信息、正则化曲率，实现近乎完美的流形对齐：</p>
+
+      <ul>
+        <li>🔹 KL 散度下降 99%</li>
+        <li>🔹 互信息提升 5–7 倍</li>
+        <li>🔹 距离相关性 ≈ 1.0</li>
+      </ul>
+
+      <p>该框架允许我们在不同粒度上精细控制：</p>
+      <ul>
+        <li>修改局部表示 → 改变词汇选择</li>
+        <li>调整中间层 → 影响句子结构</li>
+        <li>编辑全局向量 → 控制话语连贯性</li>
+      </ul>
+
+      <img src="figures/msma_framework.png" alt="MSMA Framework" class="figure">
+
+      <p>MSMA 为偏差缓解、鲁棒性增强和可控文本生成提供新路径。</p>
+
+      <p>
+        <a href="papers/msma.pdf" target="_blank" class="cta-button">📄 下载 PDF</a>
+        <a href="https://github.com/dongqi2025/msma" target="_blank" class="cta-button">💻 代码开源</a>
+      </p>
+    </div>
+
+    <!-- 论文四 -->
+    <div class="paper-card right">
+      <h2>4. DMET：动态流形演化理论</h2>
+      <p><strong>核心问题：</strong>表示轨迹如何决定生成质量？</p>
+
+      <div class="tags">
+        <span class="tag">动力系统</span>
+        <span class="tag">拓扑分析</span>
+        <span class="tag">参数调控</span>
+        <span class="tag">黄金区域</span>
+      </div>
+
+      <p>我们将生成过程视为在语义流形上的连续轨迹演化，定义三个动态指标：</p>
+
+      <div class="metric-box">
+        <strong>C (Continuity)</strong> → 光滑度 → <em>预测流畅性</em><br>
+        <strong>Q (Quality)</strong> → 吸引子紧凑性 → <em>预测语法一致性</em><br>
+        <strong>P (Persistence)</strong> → 拓扑持久性 → <em>预测长程连贯性</em>
+      </div>
+
+      <p>我们发现：</p>
+      <ul>
+        <li>温度 $\tau$ 和 top-$p$ 可调节轨迹形态</li>
+        <li>存在“黄金区域”$\tau \in [0.7,1.0], p \in [0.6,0.8]$ 实现最佳平衡</li>
+        <li>不同模型有独特“动态指纹”：Qwen2（紧凑）、Llama2（复杂）、DeepSeek-R1（均衡）</li>
+      </ul>
+
+      <img src="figures/dmet_trajectory.png" alt="DMET Trajectory" class="figure">
+
+      <p>DMET 为生成控制提供了理论指导，真正实现了“按需定制输出”。</p>
+
+      <p>
+        <a href="papers/dmet.pdf" target="_blank" class="cta-button">📄 下载 PDF</a>
+        <a href="https://github.com/dongqi2025/dmet" target="_blank" class="cta-button">💻 代码开源</a>
+      </p>
+    </div>
+
+  </div> <!-- timeline -->
+
+  <!-- 总结与展望 -->
+  <section style="text-align: center; margin: 60px 0;">
+    <h2>🔬 研究脉络总结</h2>
+    <p>我们的研究遵循 “<strong>发现 → 利用 → 连接 → 控制</strong>” 的科学范式：</p>
+    <img src="figures/research_journey.png" alt="Research Journey" class="figure">
+    <p>从静态结构到动态演化，逐步建立起对大模型内部机制的<strong>可预测、可干预、可控制</strong>的理解体系。</p>
+  </section>
+
+  <footer>
+    © 2025 Qi Dong. All rights reserved.<br>
+    Powered by GitHub Pages | Source Code on <a href="https://github.com/dongqi2025/llm-interpretability" target="_blank">GitHub</a>
+  </footer>
+
+</div>
 </body>
 </html>
